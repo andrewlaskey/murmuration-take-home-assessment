@@ -1,0 +1,16 @@
+meta {
+  name: Upload CSV
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8000/api/v1/upload
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file: @file(/Users/andrewlaskey/Documents/github/murmuration-take-home-assessment/sample-data/us_ai_survey_unique_50.csv)
+  survey_name: test
+}
