@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { QuestionResponse } from "../types/SurveyResponse";
 import { useEffect, useState } from "react";
+import { COLORS } from "../utils/constants";
 
 export default function RatingSummary({
   responses,
@@ -48,7 +49,7 @@ export default function RatingSummary({
           <XAxis dataKey="key" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="total" fill="#8884d8" />
+          <Bar dataKey="total" fill={COLORS[1]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

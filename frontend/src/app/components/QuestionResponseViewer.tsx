@@ -5,6 +5,8 @@ import { QuestionResponse } from "../types/SurveyResponse";
 import { getQuestionResponses } from "../lib/actions";
 import RatingSummary from "./RatingSummary";
 import DemographicBarChart from "./DemographicBarChart";
+import RatingsByDemo from "./RatingsByDemo";
+import { capitalize } from "../utils/capitalize";
 
 export default function QuestionResponseViewer({
   initialId,
@@ -20,6 +22,8 @@ export default function QuestionResponseViewer({
   const [questionType, setQuestionType] = useState<"rating" | "open" | null>(
     null
   );
+  const [demoIndex, setDemoIndex] = useState(0);
+  const demos = ["gender", "income", "education_level"];
 
   const updateQuestionTypeFromResponses = (
     responses: QuestionResponse[]
@@ -52,6 +56,14 @@ export default function QuestionResponseViewer({
     setResponses(responses);
     updateQuestionTypeFromResponses(responses);
     setIsLoading(false);
+  };
+
+  const handleDemoIndexInc = () => {
+    setDemoIndex((prev) => (prev >= demos.length - 1 ? 0 : prev + 1));
+  };
+  
+  const handleDemoIndexDec = () => {
+    setDemoIndex((prev) => (prev <= 0 ? demos.length - 1 : prev - 1));
   };
 
   return (
@@ -89,21 +101,30 @@ export default function QuestionResponseViewer({
       {!isLoading && (
         <div className="space-y-2 mt-4">
           {questionType === "rating" && <RatingSummary responses={responses} />}
+          {questionType === "rating" && (
+            <RatingsByDemo responses={responses} demoKey={demos[demoIndex]} />
+          )}
           <DemographicBarChart
             responses={responses}
-            demoKey="gender"
-            title="Gender"
+            demoKey={demos[demoIndex]}
+            title={capitalize(demos[demoIndex])}
           />
-          <DemographicBarChart
-            responses={responses}
-            demoKey="income"
-            title="Income"
-          />
-          <DemographicBarChart
-            responses={responses}
-            demoKey="education_level"
-            title="Education Level"
-          />
+          <div className="flex justify-end items-center gap-x-4">
+            <button
+              type="button"
+              onClick={handleDemoIndexDec}
+              className="px-4 py-2 border-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            >
+              ⏴
+            </button>
+            <button
+              type="button"
+              onClick={handleDemoIndexInc}
+              className="px-4 py-2 border-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            >
+              ⏵
+            </button>
+          </div>
         </div>
       )}
     </div>

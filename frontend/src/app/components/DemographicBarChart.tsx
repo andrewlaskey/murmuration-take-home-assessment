@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { QuestionResponse } from "../types/SurveyResponse";
 import { useEffect, useState } from "react";
+import { COLORS } from "../utils/constants";
 
 export interface DemographicBarChartProps {
   responses: QuestionResponse[];
@@ -44,7 +45,6 @@ export default function DemographicBarChart({
     }, [] as { name: string; total: number }[]);
 
     setSummary(agg);
-    console.log(agg);
   }, [responses, demoKey]);
 
   return (
@@ -55,7 +55,7 @@ export default function DemographicBarChart({
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip labelStyle={{ color: "#0a0a0a" }} />
-          <Bar dataKey="total" fill="#8884d8" />
+          <Bar dataKey="total" fill={COLORS[0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
