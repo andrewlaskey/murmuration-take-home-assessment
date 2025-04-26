@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   api:
-    build: .
+    build: ./backend
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
+      - ./backend:/backend/app
     environment:
       - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/survey_db
     depends_on:
@@ -30,6 +30,24 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+      - /frontend/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:8000
+      - API_URL=http://api:8000
+    depends_on:
+      - api
+
 
 volumes:
   postgres_data:
